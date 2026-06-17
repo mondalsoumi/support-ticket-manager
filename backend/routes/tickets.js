@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Ticket = require('../models/Ticket');
-const { protect } = require('../middleware/auth');
+const { protect, isAdmin } = require('../middleware/auth');
 
 // POST /api/tickets — create a ticket
 const { classifyTicket } = require('../utils/aiClassifier');
@@ -34,21 +34,13 @@ router.post('/', protect, async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
-// GET /api/tickets — get all tickets (support/admin) or own tickets (customer)
+// GET /api/tickets — always returns the logged-in user's OWN tickets
 router.get('/', protect, async (req, res) => {
     try {
-        let tickets;
-
-        if (req.user.role === 'customer') {
-            tickets = await Ticket.find({ createdBy: req.user._id })
-                .populate('createdBy', 'name email')
-                .sort({ createdAt: -1 });
-        } else {
-            tickets = await Ticket.find({})
-                .populate('createdBy', 'name email')
-                .populate('assignedTo', 'name email')
-                .sort({ createdAt: -1 });
-        }
+        const tickets = await Ticket.find({ createdBy: req.user._id })
+            .populate('createdBy', 'name email')
+            .populate('assignedTo', 'name email')
+            .sort({ createdAt: -1 });
 
         res.json(tickets);
     } catch (error) {
@@ -56,25 +48,22 @@ router.get('/', protect, async (req, res) => {
     }
 });
 
-// GET /api/tickets/:id — get single ticket
-router.get('/:id', protect, async (req, res) => {
+// GET /api/tickets/all — admin/support only, returns EVERY ticket
+router.get('/all', protect, isAdmin, async (req, res) => {
     try {
-        const ticket = await Ticket.findById(req.params.id)
+        const tickets = await Ticket.find({})
             .populate('createdBy', 'name email')
-            .populate('assignedTo', 'name email');
+            .populate('assignedTo', 'name email')
+            .sort({ createdAt: -1 });
 
-        if (!ticket) {
-            return res.status(404).json({ message: 'Ticket not found' });
-        }
-
-        res.json(ticket);
+        res.json(tickets);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 });
 
 // PATCH /api/tickets/:id — update ticket status or assignment
-router.patch('/:id', protect, async (req, res) => {
+router.patch('/:id', protect, isAdmin, async (req, res) => {
     try {
         const { status, assignedTo, priority } = req.body;
 

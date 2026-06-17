@@ -16,7 +16,7 @@ const Admin = () => {
 
     const fetchTickets = async () => {
         try {
-            const res = await API.get('/tickets');
+            const res = await API.get('/tickets/all');
             setTickets(res.data);
         } catch (err) {
             setError('Failed to load tickets');

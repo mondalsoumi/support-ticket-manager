@@ -8,12 +8,12 @@ const Navbar = () => {
 
     return (
         <nav className="bg-white shadow mb-6">
-            <div className="max-w-4xl mx-auto px-6 py-3 flex justify-between items-center">
-                <Link to="/dashboard" className="text-lg font-bold text-blue-600">
+            <div className="w-full px-6 py-3 flex justify-between items-center">
+                <Link to="/dashboard" className="text-lg font-bold text-blue-900">
                     Support Tickets
                 </Link>
 
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-6">
                     {user.role === 'admin' && (
                         <>
                             <Link to="/admin" className="text-sm text-gray-600 hover:text-blue-600">

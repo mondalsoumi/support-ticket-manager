@@ -7,6 +7,7 @@ import TicketDetail from './pages/TicketDetail';
 import Admin from './pages/Admin';
 import Analytics from './pages/Analytics';
 import Dashboard from './pages/Dashboard';
+import ForgotPassword from './pages/ForgotPassword';
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
               <Analytics />
             </ProtectedRoute>
           } />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

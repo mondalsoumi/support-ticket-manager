@@ -20,6 +20,14 @@ const userSchema = new mongoose.Schema({
         type: String,
         enum: ['customer', 'support', 'admin'],
         default: 'customer'
+    },
+    securityQuestion: {
+        type: String,
+        required: true
+    },
+    securityAnswer: {
+        type: String,
+        required: true
     }
 }, { timestamps: true });
 
