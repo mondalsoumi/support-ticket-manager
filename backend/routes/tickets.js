@@ -61,7 +61,31 @@ router.get('/all', protect, isAdmin, async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
+// GET /api/tickets/:id — get a single ticket by ID
+router.get('/:id', protect, async (req, res) => {
+    try {
+        const ticket = await Ticket.findById(req.params.id)
+            .populate('createdBy', 'name email')
+            .populate('assignedTo', 'name email');
 
+        if (!ticket) {
+            return res.status(404).json({ message: 'Ticket not found' });
+        }
+
+        // Optional: only allow the owner or admin to view it
+        if (
+            ticket.createdBy._id.toString() !== req.user._id.toString() &&
+            req.user.role !== 'admin' &&
+            req.user.role !== 'support'
+        ) {
+            return res.status(403).json({ message: 'Not authorized' });
+        }
+
+        res.json(ticket);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
 // PATCH /api/tickets/:id — update ticket status or assignment
 router.patch('/:id', protect, isAdmin, async (req, res) => {
     try {
