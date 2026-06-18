@@ -6,7 +6,7 @@ import TicketForm from '../components/TicketForm';
 import TicketCard from '../components/TicketCard';
 
 const Dashboard = () => {
-    const { user, logout } = useAuth();
+    const { user } = useAuth();
     const [tickets, setTickets] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');

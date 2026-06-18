@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import StatusBadge from './StatusBadge';
 import PriorityBadge from './PriorityBadge';
 
 const statusOptions = ['open', 'in-progress', 'resolved', 'closed'];

@@ -15,23 +15,23 @@ const TicketDetail = () => {
     const [error, setError] = useState('');
 
     useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const [ticketRes, commentsRes] = await Promise.all([
+                    API.get(`/tickets/${id}`),
+                    API.get(`/tickets/${id}/comments`)
+                ]);
+                setTicket(ticketRes.data);
+                setComments(commentsRes.data);
+            } catch (err) {
+                setError(err.response?.data?.message || 'Failed to load ticket');
+            } finally {
+                setLoading(false);
+            }
+        };
+
         fetchData();
     }, [id]);
-
-    const fetchData = async () => {
-        try {
-            const [ticketRes, commentsRes] = await Promise.all([
-                API.get(`/tickets/${id}`),
-                API.get(`/tickets/${id}/comments`)
-            ]);
-            setTicket(ticketRes.data);
-            setComments(commentsRes.data);
-        } catch (err) {
-            setError(err.response?.data?.message || 'Failed to load ticket');
-        } finally {
-            setLoading(false);
-        }
-    };
 
     const handleCommentAdded = (newComment) => {
         setComments((prev) => [...prev, newComment]); // add to end — chronological order
