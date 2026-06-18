@@ -135,5 +135,4 @@ Make sure `frontend/src/api/axios.js` has `baseURL: 'http://localhost:5000/api'`
 
 
 
-## Author
 
