@@ -13,7 +13,7 @@ Customers submit support tickets in plain language. The moment a ticket is creat
 - **Priority** (low, medium, high, urgent)
 - **A suggested reply** for the support agent to use as a starting point
 
-Support agents and admins then manage, update, and respond to tickets through a clean dashboard — with full analytics showing ticket volume by category and priority split.
+Support agents and admins then manage, update, and respond to tickets through a clean dashboard with full analytics showing ticket volume by category and priority split.
 
 ---
 
@@ -133,31 +133,7 @@ npm start
 
 Make sure `frontend/src/api/axios.js` has `baseURL: 'http://localhost:5000/api'` for local development.
 
----
 
-## Key design decisions
-
-**AI as infrastructure, not a feature** — the Gemini call is embedded directly in the ticket creation flow, not a separate optional step. If the AI fails (rate limit, outage), the ticket still saves with sensible defaults. The support team's workflow never breaks because of a third-party dependency.
-
-**Single `module.exports` rule** — a subtle Node.js pitfall discovered during build: calling `module.exports` twice in one file silently overwrites the first. All modules export once at the bottom.
-
-**Separation of "my tickets" vs "all tickets"** — `GET /api/tickets` always returns the logged-in user's own tickets regardless of role. `GET /api/tickets/all` is a separate admin-only endpoint. This prevents a logged-in admin from seeing everyone's tickets on their personal dashboard.
-
-**Security answer normalization** — security answers are lowercased and trimmed before hashing so "Mumbai", "MUMBAI", and " mumbai " all match correctly during verification.
-
----
-
-## What I'd add next
-
-- Email-based password reset (Nodemailer + Resend)
-- Real-time ticket updates using WebSockets
-- SLA tracking with auto-escalation on breach
-- Ticket assignment to specific support agents
-- Customer satisfaction rating after resolution
-- Mobile app using React Native
-
----
 
 ## Author
 
-Built by [Soumi Mondal](https://github.com/mondalsoumi) as a full-stack learning project — backend to frontend, authentication to AI integration, local development to production deployment.
