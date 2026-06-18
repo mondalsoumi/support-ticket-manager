@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API = axios.create({
-    baseURL: 'https://support-ticket-manager.onrender.com'
+    baseURL: 'https://support-ticket-manager.onrender.com/api'
 });
 
 // Attach token to every request automatically
